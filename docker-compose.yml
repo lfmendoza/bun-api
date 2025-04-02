@@ -1,11 +1,46 @@
 version: "3.9"
 
 services:
-  bun-api:
+  db:
+    image: postgres:16
+    container_name: incidents_db
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "incidents_db"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db_init:/docker-entrypoint-initdb.d
+    networks:
+      - incidents_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
     build: .
-    container_name: bun-api
+    container_name: incidents_api
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-    restart: unless-stopped
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=incidents_db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - incidents_net
+
+volumes:
+  postgres_data:
+
+networks:
+  incidents_net:
+    driver: bridge

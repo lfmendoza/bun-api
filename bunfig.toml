@@ -1,2 +1,2 @@
-name = "bun-api"
-entrypoint = "index.ts"
+name = "bun-incidents-api"
+entrypoint = "src/index.ts"

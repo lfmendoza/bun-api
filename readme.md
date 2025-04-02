@@ -22,6 +22,23 @@ Proyecto base de una API desarrollada con [Bun](https://bun.sh/), un runtime ult
 
 ---
 
+### Datos de un incidente
+
+- `id`: Autogenerado.
+- `reporter`: Obligatorio (string).
+- `description`: Mínimo 10 caracteres.
+- `status`: (pendiente, en proceso, resuelto). Se actualiza solo en `PUT`.
+- `created_at`: Fecha de reporte.
+
+---
+
+## Requisitos
+
+- **Docker** y **Docker Compose** instalados.
+- No necesitas instalar **Bun** localmente; todo se ejecuta en contenedores.
+
+---
+
 ## 📦 Estructura del proyecto
 
 bun-api/  
@@ -49,26 +66,36 @@ cd bun-api
 docker-compose up --build
 ```
 
+- Se creará la tabla incidents (gracias a init.sql).
+- La API quedará disponible en: [http://localhost:3000](http://localhost:3000)
+- Swagger UI en la ruta principal: [http://localhost:3000/](http://localhost:3000/)
+- El archivo swagger.yaml en [http://localhost:3000/swagger.yaml](http://localhost:3000/swagger.yaml)
+
 ## ✅ Cómo probar la API
 
 ### 1. Probar el endpoint GET
 
 ```bash
-curl http://localhost:3000/api/hello
+curl http://localhost:3000/incidents
 ```
 
 #### Respuesta esperada:
 
 ```bash
-{ "message": "Hola desde Bun!" }
+curl -X PUT http://localhost:3000/incidents/1 \
+  -H "Content-Type: application/json" \
+  -d '{"status": "en proceso"}'
 ```
 
 ### 2. Probar el endpoint POST
 
 ```bash
-curl -X POST http://localhost:3000/api/data \
+curl -X POST http://localhost:3000/incidents \
   -H "Content-Type: application/json" \
-  -d '{"nombre": "Fernando", "edad": 30}'
+  -d '{
+    "reporter": "Juan Perez",
+    "description": "La impresora no imprime y hace mucho ruido"
+  }'
 
 ```
 

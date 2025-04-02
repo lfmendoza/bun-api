@@ -1,5 +1,32 @@
 {
+  "name": "bun-incidents-api",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "pg": "^8.10.0"
+  },
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "test": "bun test"
+  },
+  "bun": {
+    "transpiler": "tsc",
+    "transpilerOptions": {
+      "module": "ESNext",
+      "target": "ESNext",
+      "moduleResolution": "NodeNext",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true
+    }
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "license": "MIT",
   "devDependencies": {
-    "@types/bun": "^1.2.8"
+    "@types/bun": "^1.2.8",
+    "@types/pg": "^8.11.11"
   }
 }

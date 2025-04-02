@@ -1,14 +1,17 @@
-# Usa la imagen oficial de Bun
+# Imagen oficial de Bun
 FROM oven/bun:1.0.25
 
-# Crea el directorio de trabajo
+# Directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos del proyecto
+# Copiamos todos los archivos del proyecto
 COPY . .
 
-# Exponer puerto de la API
+# Instalamos las dependencias (pg, etc.)
+RUN bun install
+
+# Exponemos puerto
 EXPOSE 3000
 
-# Comando para ejecutar la app
-CMD ["bun", "index.ts"]
+# Al arrancar el contenedor, ejecutamos la aplicación
+CMD ["bun", "src/index.ts"]
