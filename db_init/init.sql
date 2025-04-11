@@ -1,5 +1,3 @@
-\connect incidents_db;
-
 CREATE TABLE IF NOT EXISTS incidents (
   id SERIAL PRIMARY KEY,
   reporter VARCHAR(255) NOT NULL,

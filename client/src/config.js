@@ -5,7 +5,7 @@
 
 export const CONFIG = {
   // API
-  API_BASE_URL: "http://localhost:3000",
+  API_BASE_URL: "/api",
 
   // Rutas de la aplicación
   ROUTES: {

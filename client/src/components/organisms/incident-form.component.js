@@ -612,10 +612,14 @@ class IncidentFormComponent extends HTMLElement {
       
       /* Loader */
       .form-loader {
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         margin: 2rem 0;
+      }
+
+      .list-loader:not([hidden]) {
+        display: flex;
       }
       
       .spinner {
@@ -625,6 +629,14 @@ class IncidentFormComponent extends HTMLElement {
         border-radius: 50%;
         border-top-color: var(--primary-color, #3b82f6);
         animation: spin 1s linear infinite;
+      }
+
+      form {
+        display: block;
+      }
+        
+      form [hidden] {
+        display: none;
       }
       
       @keyframes spin {

@@ -463,9 +463,13 @@ class IncidentDetailPage extends HTMLElement {
       }
       
       .detail-loader {
-        display: flex;
+        display: none;
         justify-content: center;
         padding: 2rem 0;
+      }
+
+      .list-loader:not([hidden]) {
+        display: flex;
       }
       
       .spinner {

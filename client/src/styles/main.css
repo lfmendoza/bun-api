@@ -78,10 +78,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-*[hidden] {
-  display: none !important;
-}
-
 /* Utilidades para layout */
 .container {
   width: 100%;

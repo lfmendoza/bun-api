@@ -3,84 +3,100 @@ version: "3.9"
 services:
   db:
     image: postgres:16
-    container_name: ${COMPOSE_PROJECT_NAME:-incidents}_db
+    container_name: incidents_db
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-incidents_db}
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "incidents_db"
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db_init:/docker-entrypoint-initdb.d
     networks:
       - incidents_net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
     restart: unless-stopped
 
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    container_name: ${COMPOSE_PROJECT_NAME:-incidents}_api
+    container_name: incidents_api
     ports:
-      - "${API_PORT:-3000}:3000"
+      - "3000:3000"
     environment:
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_USER=${DB_USER:-postgres}
-      - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_NAME=${DB_NAME:-incidents_db}
-      - NODE_ENV=${NODE_ENV:-development}
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=incidents_db
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     networks:
       - incidents_net
-    restart: unless-stopped
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:3000/incidents",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+    profiles:
+      - prod
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+
+  api-dev:
+    container_name: incidents_api_dev
+    volumes:
+      - ./api:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=incidents_db
+    command: bun --hot run src/index.ts
+    depends_on:
+      - db
+    networks:
+      - incidents_net
+    profiles:
+      - dev
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
 
   client:
+    container_name: incidents_client
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - incidents_net
+    profiles:
+      - prod
     build:
       context: ./client
       dockerfile: Dockerfile
-      args:
-        - API_URL=${API_URL:-http://localhost:3000}
-    container_name: ${COMPOSE_PROJECT_NAME:-incidents}_client
+
+  client-dev:
+    container_name: incidents_client_dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     ports:
-      - "${CLIENT_PORT:-8080}:80"
+      - "8080:8080"
+    command: npm run dev
+    environment:
+      - API_URL=http://localhost:3000
     depends_on:
-      api:
-        condition: service_healthy
+      - api-dev
     networks:
       - incidents_net
-    restart: unless-stopped
-    environment:
-      - API_URL=${API_URL:-http://api:3000}
+    profiles:
+      - dev
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
 
 volumes:
   postgres_data:
-    name: ${COMPOSE_PROJECT_NAME:-incidents}_postgres_data
 
 networks:
   incidents_net:
-    name: ${COMPOSE_PROJECT_NAME:-incidents}_net
     driver: bridge

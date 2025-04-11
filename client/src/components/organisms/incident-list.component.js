@@ -684,10 +684,14 @@ class IncidentListComponent extends HTMLElement {
       
       /* Loader */
       .list-loader {
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         padding: 3rem 0;
+      }
+
+      .list-loader:not([hidden]) {
+        display: flex;
       }
       
       .spinner {

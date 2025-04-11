@@ -344,6 +344,7 @@ class IncidentCardComponent extends HTMLElement {
   _updateCard() {
     // Referencias a elementos
     const card = this.shadowRoot.querySelector(".card");
+    const cardTitle = this.shadowRoot.querySelector(".card-title");
     const statusBadge = this.shadowRoot.querySelector("status-badge");
     const reporter = this.shadowRoot.querySelector(".reporter");
     const description = this.shadowRoot.querySelector(".description");
@@ -353,6 +354,8 @@ class IncidentCardComponent extends HTMLElement {
     const expandIcon = expandBtn?.querySelector("svg");
 
     // Actualizar componentes
+    if (cardTitle) cardTitle.textContent = `Incidente #${this._incidentId}`;
+
     if (statusBadge) statusBadge.setAttribute("status", this._status);
     if (reporter) reporter.textContent = this._reporter;
 
@@ -395,10 +398,6 @@ class IncidentCardComponent extends HTMLElement {
       :host {
         display: block;
         margin-bottom: 1rem;
-      }
-      
-      *[hidden] {
-        display: none !important;
       }
       
       .card {
@@ -595,7 +594,7 @@ class IncidentCardComponent extends HTMLElement {
           
           <div class="description">${this._truncateText(
             this._description,
-            100
+            50
           )}</div>
           
           <button class="expand-btn">

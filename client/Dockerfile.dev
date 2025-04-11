@@ -1,0 +1,11 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copiamos solo package.json para cachear node_modules
+COPY package*.json ./
+RUN npm install
+
+EXPOSE 8080
+
+# El comando para ejecutar está en docker-compose (npm run dev)
