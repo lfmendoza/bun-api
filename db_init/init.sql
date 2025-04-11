@@ -14,14 +14,13 @@ CHECK (status IN ('pendiente', 'en proceso', 'resuelto'));
 
 
 INSERT INTO incidents (reporter, description, status) VALUES
-('Juan Pérez', 'Incidente 1', 'pendiente'),
-('María López', 'Incidente 2', 'resuelto'),
-('Carlos García', 'Incidente 3', 'pendiente'),
-('Ana Martínez', 'Incidente 4', 'en proceso'),
-('Luis Fernández', 'Incidente 5', 'pendiente');
-INSERT INTO incidents (reporter, description, status) VALUES
-('Pedro Sánchez', 'Incidente 6', 'resuelto'),
-('Laura Gómez', 'Incidente 7', 'pendiente'),
-('Javier Torres', 'Incidente 8', 'en proceso'),
-('Sofía Ramírez', 'Incidente 9', 'pendiente'),
-('Diego Ruiz', 'Incidente 10', 'resuelto');
+('Ana Martínez', 'La impresora del departamento de marketing no funciona correctamente. Muestra error de conexión.', 'pendiente'),
+('Carlos Rodríguez', 'Necesito acceso al sistema de gestión de inventario para el nuevo empleado Juan Pérez.', 'en proceso'),
+('Elena Gómez', 'El equipo del departamento contable está muy lento y se bloquea constantemente al usar Excel.', 'resuelto'),
+('Luis Fernández', 'La aplicación de CRM muestra un error al intentar generar informes mensuales.', 'pendiente'),
+('Sofía López', 'Solicitud de instalación de software de diseño gráfico en el equipo de Laura del departamento creativo.', 'en proceso'),
+('Miguel Sánchez', 'El proyector de la sala de reuniones principal no conecta correctamente con los portátiles.', 'resuelto'),
+('Carmen Díaz', 'Problema con el acceso VPN desde casa, no permite la conexión después de actualizar Windows.', 'pendiente'),
+('Javier Torres', 'Los teléfonos IP de recepción no reciben llamadas entrantes pero sí pueden realizar salientes.', 'en proceso'),
+('Patricia Navarro', 'El sistema de climatización de la planta baja está configurado a temperatura muy baja y no se puede ajustar.', 'pendiente'),
+('Roberto Jiménez', 'Solicitud de revisión de seguridad para el nuevo portal web antes de su lanzamiento.', 'pendiente');

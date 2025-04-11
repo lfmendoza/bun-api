@@ -22,7 +22,7 @@ services:
       retries: 5
 
   api:
-    build: .
+    build: ./api
     container_name: incidents_api
     ports:
       - "3000:3000"
@@ -37,6 +37,18 @@ services:
         condition: service_healthy
     networks:
       - incidents_net
+
+  client:
+    build: ./client
+    container_name: incidents_client
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - incidents_net
+    environment:
+      - API_URL=http://api:3000
 
 volumes:
   postgres_data:

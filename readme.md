@@ -1,129 +1,191 @@
-# Bun API - Starter Project with Docker
+# Sistema Integrado de Gestión de Incidentes
 
-Proyecto base de una API desarrollada con [Bun](https://bun.sh/), un runtime ultrarrápido para JavaScript y TypeScript. La API incluye dos endpoints simples (`GET` y `POST`) y está lista para correr en contenedores utilizando Docker y Docker Compose.
+Una plataforma completa para gestionar incidentes técnicos, con una API en Bun y un cliente moderno en vanilla JavaScript utilizando Web Components, optimizada para rendimiento y usabilidad.
 
----
+## 🚀 Características
 
-## 🚀 Endpoints disponibles
+### Frontend (Cliente)
 
-| Método | Ruta         | Descripción                                 |
-| ------ | ------------ | ------------------------------------------- |
-| GET    | `/api/hello` | Retorna un mensaje de bienvenida            |
-| POST   | `/api/data`  | Recibe un JSON y lo retorna en la respuesta |
+- Arquitectura basada en Web Components sin dependencias externas
+- Patrón de arquitectura limpia y diseño atómico
+- Uso de Web Workers para operaciones asíncronas sin bloquear el hilo principal
+- Renderizado por lotes para optimizar rendimiento con grandes listas
+- Sistema de enrutamiento SPA cliente
+- Gestión de estado centralizada con patrón similar a Redux
+- Caching inteligente de peticiones a la API
+- Soporte para tema claro/oscuro
+- Diseño responsive y accesible
 
----
+### Backend (API)
 
-## ⚙️ Tecnologías usadas
+- Desarrollada con [Bun](https://bun.sh/), un runtime ultrarrápido para JavaScript y TypeScript
+- Endpoints RESTful para gestionar incidentes
+- Conexión a PostgreSQL para persistencia de datos
+- Documentación con Swagger UI
+- Alta performance con bajo consumo de recursos
+
+## ⚙️ Tecnologías utilizadas
+
+### Frontend
+
+- Vanilla JavaScript (ES6+)
+- Web Components nativos
+- Web Workers
+- ShadowDOM para encapsulación
+- Custom Events para comunicación entre componentes
+- CSS personalizado con variables
+
+### Backend
 
 - [Bun](https://bun.sh/) (Runtime y servidor)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+- [PostgreSQL](https://www.postgresql.org/)
+- Swagger para documentación de API
 
----
+### Infraestructura
+
+- [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/)
+- [Nginx](https://nginx.org/) para servir el frontend
+
+## 📋 Estructura de datos
 
 ### Datos de un incidente
 
-- `id`: Autogenerado.
-- `reporter`: Obligatorio (string).
-- `description`: Mínimo 10 caracteres.
-- `status`: (pendiente, en proceso, resuelto). Se actualiza solo en `PUT`.
-- `created_at`: Fecha de reporte.
-
----
-
-## Requisitos
-
-- **Docker** y **Docker Compose** instalados.
-- No necesitas instalar **Bun** localmente; todo se ejecuta en contenedores.
-
----
+- `id`: Autogenerado (integer)
+- `reporter`: Nombre del reportador (string, obligatorio)
+- `description`: Descripción del incidente (mínimo 10 caracteres)
+- `status`: Estado del incidente (pendiente, en proceso, resuelto)
+- `created_at`: Fecha y hora de creación
 
 ## 📦 Estructura del proyecto
 
-bun-api/  
-├── index.ts # Código principal de la API  
-├── bunfig.toml # Configuración de Bun  
-├── tsconfig.json # Configuración de TypeScript  
-├── Dockerfile # Imagen de Docker para Bun  
-├── docker-compose.yml # Orquestación con Docker Compose  
-└── .dockerignore # Archivos ignorados en la imagen
+incidents-platform/
+├── api/ # API en Bun
+├── client/ # Cliente en Vanilla JavaScript
+├── db_init/ # Scripts de inicialización de BD
+├── docker-compose.yml # Orquestación con Docker Compose
+└── README.md # Este archivo
 
----
+## 🛠️ Requisitos
 
-## ▶️ Cómo correr el proyecto
+- **Docker** y **Docker Compose** instalados
+- No necesitas instalar nada más localmente; todo se ejecuta en contenedores
+
+## ▶️ Cómo ejecutar el proyecto
 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/lfmendoza/bun-api.git
-cd bun-api
-```
+git clone <tu-repositorio>
+cd <nombre-del-directorio>
+2. Iniciar los contenedores con Docker Compose
+bashdocker-compose up --build
+3. Acceder a la aplicación
 
-### 2. Iniciar el contenedor con Docker Compose
+Cliente (Frontend): http://localhost:8080
+API (Backend): http://localhost:3000
+Swagger UI: http://localhost:3000/
+Swagger YAML: http://localhost:3000/swagger.yaml
 
-```bash
-docker-compose up --build
-```
+📚 Documentación de API
+Endpoints disponibles
+MétodoRutaDescripciónGET/incidentsObtener todos los incidentesGET/incidents/:idObtener incidente por IDPOST/incidentsCrear un nuevo incidentePUT/incidents/:idActualizar estado de incidenteDELETE/incidents/:idEliminar un incidente
+Detalles de los endpoints
+GET /incidents
 
-- Se creará la tabla incidents (gracias a init.sql).
-- La API quedará disponible en: [http://localhost:3000](http://localhost:3000)
-- Swagger UI en la ruta principal: [http://localhost:3000/](http://localhost:3000/)
-- El archivo swagger.yaml en [http://localhost:3000/swagger.yaml](http://localhost:3000/swagger.yaml)
+Descripción: Obtiene la lista completa de incidentes
+Respuesta: Array de objetos incidente
+Código de respuesta: 200 OK
 
-## ✅ Cómo probar la API
+GET /incidents/{id}
 
-### 1. Probar el endpoint GET
+Descripción: Obtiene un incidente específico por su ID
+Parámetros: id (integer, en path)
+Respuesta: Objeto incidente
+Códigos de respuesta:
 
-```bash
-curl http://localhost:3000/incidents
-```
+200 OK (Incidente encontrado)
+404 (Incidente no encontrado)
 
-#### Respuesta esperada:
 
-```bash
-curl -X PUT http://localhost:3000/incidents/1 \
-  -H "Content-Type: application/json" \
-  -d '{"status": "en proceso"}'
-```
 
-### 2. Probar el endpoint POST
+POST /incidents
 
-```bash
-curl -X POST http://localhost:3000/incidents \
-  -H "Content-Type: application/json" \
-  -d '{
-    "reporter": "Juan Perez",
-    "description": "La impresora no imprime y hace mucho ruido"
-  }'
+Descripción: Crea un nuevo incidente
+Body: Objeto con reporter y description
+Validaciones:
 
-```
+reporter es obligatorio
+description debe tener al menos 10 caracteres
 
-#### Respuesta esperada:
 
-```bash
-{
-  "message": "Datos recibidos correctamente",
-  "data": {
-    "nombre": "Fernando",
-    "edad": 100
-  }
-}
+Respuesta: Incidente creado
+Códigos de respuesta:
 
-```
+201 Created (Incidente creado)
+400 Bad Request (Error de validación)
 
-## ❓ Preguntas frecuentes
 
-### ¿Necesito instalar Bun en mi máquina?
 
-No. Bun se ejecuta dentro del contenedor de Docker, así que no necesitas instalar nada más allá de Docker y Docker Compose.
+PUT /incidents/{id}
 
-### ¿Puedo usar este proyecto como base?
+Descripción: Actualiza el estado de un incidente
+Parámetros: id (integer, en path)
+Body: Objeto con status (pendiente, en proceso, resuelto)
+Respuesta: Incidente actualizado
+Códigos de respuesta:
 
-¡Sí! Está pensado como plantilla inicial para proyectos más complejos. Puedes extenderlo fácilmente con rutas, middlewares, conexión a bases de datos y más.
+200 OK (Incidente actualizado)
+400 Bad Request (Error de validación)
+404 (Incidente no encontrado)
 
----
 
-## © Licencia
 
+DELETE /incidents/{id}
+
+Descripción: Elimina un incidente
+Parámetros: id (integer, en path)
+Respuesta: Mensaje de éxito
+Códigos de respuesta:
+
+200 OK (Incidente eliminado)
+404 (Incidente no encontrado)
+
+
+
+🧩 Funcionalidades del cliente
+
+Listado de incidentes: Vista principal con listado paginado y opciones de filtrado/ordenación
+Detalle de incidente: Vista completa con toda la información del incidente
+Creación de incidentes: Formulario para reportar nuevos incidentes
+Actualización de estado: Cambiar el estado de un incidente entre pendiente, en proceso y resuelto
+Eliminación de incidentes: Eliminar incidentes con confirmación
+Tema claro/oscuro: Cambiar entre temas con persistencia de preferencia
+Notificaciones: Sistema de notificaciones para informar sobre acciones realizadas
+Navegación responsive: Adaptación a diferentes tamaños de pantalla
+
+🧪 Consideraciones técnicas
+Optimizaciones de rendimiento
+
+Web Workers para operaciones pesadas
+Renderizado por lotes de listas grandes
+Lazy Loading de componentes
+Caché inteligente para peticiones a la API
+
+Accesibilidad
+
+Etiquetas ARIA para componentes interactivos
+Estructura semántica de HTML
+Suficiente contraste de colores
+Navegación por teclado
+
+Seguridad
+
+Sanitización de entradas
+Protección contra XSS
+Headers de seguridad en configuración de Nginx
+Validación de datos tanto en cliente como en servidor
+
+📝 Licencia
 Este proyecto es de código abierto y puede ser usado con libertad.
+```

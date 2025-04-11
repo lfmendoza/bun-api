@@ -1,5 +1,12 @@
 import { Client } from "pg";
 
+const headers = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Accept",
+  "Content-Type": "application/json",
+};
+
 // 1) Conexión a Postgres usando variables de entorno
 const dbClient = new Client({
   host: Bun.env.DB_HOST || "db",
@@ -22,14 +29,14 @@ dbClient
 async function notFoundResponse() {
   return new Response(JSON.stringify({ error: "Incidente no encontrado" }), {
     status: 404,
-    headers: { "Content-Type": "application/json" },
+    headers: headers,
   });
 }
 
 async function badRequestResponse(message: string) {
   return new Response(JSON.stringify({ error: message }), {
     status: 400,
-    headers: { "Content-Type": "application/json" },
+    headers: headers,
   });
 }
 
@@ -38,7 +45,7 @@ async function serveSwaggerUI(request: Request) {
   if (request.method === "GET") {
     const html = await Bun.file("./swagger/swagger.html").text();
     return new Response(html, {
-      headers: { "Content-Type": "text/html" },
+      headers: headers,
     });
   }
   return new Response("Method Not Allowed", { status: 405 });
@@ -49,7 +56,7 @@ async function serveSwaggerSpec(request: Request) {
   if (request.method === "GET") {
     const file = await Bun.file(`./swagger/swagger.yaml`).text();
     return new Response(file, {
-      headers: { "Content-Type": "application/x-yaml" },
+      headers: headers,
     });
   }
   return new Response("Method Not Allowed", { status: 405 });
@@ -83,13 +90,13 @@ const server = Bun.serve({
             "SELECT * FROM incidents ORDER BY id"
           );
           return new Response(JSON.stringify(rows), {
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         } catch (error) {
           console.error(error);
           return new Response(JSON.stringify({ error: "Error interno" }), {
             status: 500,
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         }
       }
@@ -121,13 +128,13 @@ const server = Bun.serve({
 
           return new Response(JSON.stringify(newIncident), {
             status: 201,
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         } catch (error) {
           console.error(error);
           return new Response(JSON.stringify({ error: "Error interno" }), {
             status: 500,
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         }
       }
@@ -151,13 +158,13 @@ const server = Bun.serve({
             return notFoundResponse();
           }
           return new Response(JSON.stringify(rows[0]), {
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         } catch (error) {
           console.error(error);
           return new Response(JSON.stringify({ error: "Error interno" }), {
             status: 500,
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         }
       }
@@ -191,13 +198,13 @@ const server = Bun.serve({
           `;
           const updatedResult = await dbClient.query(updateQuery, [status, id]);
           return new Response(JSON.stringify(updatedResult.rows[0]), {
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         } catch (error) {
           console.error(error);
           return new Response(JSON.stringify({ error: "Error interno" }), {
             status: 500,
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         }
       }
@@ -219,14 +226,14 @@ const server = Bun.serve({
           return new Response(
             JSON.stringify({ message: "Incidente eliminado correctamente" }),
             {
-              headers: { "Content-Type": "application/json" },
+              headers: headers,
             }
           );
         } catch (error) {
           console.error(error);
           return new Response(JSON.stringify({ error: "Error interno" }), {
             status: 500,
-            headers: { "Content-Type": "application/json" },
+            headers: headers,
           });
         }
       }
@@ -237,7 +244,7 @@ const server = Bun.serve({
     // -------------
     return new Response(JSON.stringify({ error: "Not Found" }), {
       status: 404,
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
     });
   },
 });
