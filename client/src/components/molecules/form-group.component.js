@@ -180,7 +180,7 @@ class FormGroupComponent extends HTMLElement {
     this.shadowRoot.innerHTML = `
         <style>${styles}</style>
         <div class="form-group ${this._error ? "has-error" : ""}">
-          <label for="${this._forId}" ?hidden="${!this._label}">
+          <label for="${this._forId}" hidden="${!this._label}">
             ${this._label}${this._required ? " *" : ""}
           </label>
           
@@ -188,7 +188,7 @@ class FormGroupComponent extends HTMLElement {
             <slot></slot>
           </div>
           
-          <div class="error-message" ?hidden="${!this._error}">${
+          <div class="error-message" hidden="${!this._error}">${
       this._error
     }</div>
           <div class="help-text">

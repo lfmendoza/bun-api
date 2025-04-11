@@ -168,7 +168,7 @@ class LoaderComponent extends HTMLElement {
     this.shadowRoot.innerHTML = `
         <style>${styles}</style>
         <div class="loader loader-${this._size} loader-${this._variant}"></div>
-        <div class="loader-text" ?hidden="${!this._text}">${this._text}</div>
+        <div class="loader-text" hidden="${!this._text}">${this._text}</div>
       `;
   }
 }

@@ -6,7 +6,6 @@
 import { ApiService } from "../../core/services/api.service.js";
 import { store, actions } from "../../core/store/store.js";
 import { getRouter } from "../../router.js";
-import { NotificationService } from "../../core/services/notification.service.js";
 
 /**
  * Componente Incident Card - Componente molecular
@@ -396,6 +395,10 @@ class IncidentCardComponent extends HTMLElement {
       :host {
         display: block;
         margin-bottom: 1rem;
+      }
+      
+      *[hidden] {
+        display: none !important;
       }
       
       .card {

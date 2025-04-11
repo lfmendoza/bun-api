@@ -528,15 +528,15 @@ class IncidentDetailPage extends HTMLElement {
           </div>
         </div>
         
-        <div class="detail-loader" ?hidden="${!this._loading}">
+        <div class="detail-loader" hidden="${!this._loading}">
           <div class="spinner"></div>
         </div>
         
-        <div class="error-message" ?hidden="${!this._error}">${
+        <div class="error-message" hidden="${!this._error}">${
       this._error || ""
     }</div>
         
-        <div class="detail-content" ?hidden="${
+        <div class="detail-content" hidden="${
           this._loading || this._error || !this._incident
         }">
           <div class="incident-info">

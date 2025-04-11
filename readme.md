@@ -78,8 +78,10 @@ incidents-platform/
 ```bash
 git clone <tu-repositorio>
 cd <nombre-del-directorio>
+```
+
 2. Iniciar los contenedores con Docker Compose
-bashdocker-compose up --build
+   bashdocker-compose up --build
 3. Acceder a la aplicación
 
 Cliente (Frontend): http://localhost:8080
@@ -107,8 +109,6 @@ Códigos de respuesta:
 200 OK (Incidente encontrado)
 404 (Incidente no encontrado)
 
-
-
 POST /incidents
 
 Descripción: Crea un nuevo incidente
@@ -118,14 +118,11 @@ Validaciones:
 reporter es obligatorio
 description debe tener al menos 10 caracteres
 
-
 Respuesta: Incidente creado
 Códigos de respuesta:
 
 201 Created (Incidente creado)
 400 Bad Request (Error de validación)
-
-
 
 PUT /incidents/{id}
 
@@ -139,8 +136,6 @@ Códigos de respuesta:
 400 Bad Request (Error de validación)
 404 (Incidente no encontrado)
 
-
-
 DELETE /incidents/{id}
 
 Descripción: Elimina un incidente
@@ -150,8 +145,6 @@ Códigos de respuesta:
 
 200 OK (Incidente eliminado)
 404 (Incidente no encontrado)
-
-
 
 🧩 Funcionalidades del cliente
 
@@ -187,5 +180,7 @@ Headers de seguridad en configuración de Nginx
 Validación de datos tanto en cliente como en servidor
 
 📝 Licencia
+
+```
 Este proyecto es de código abierto y puede ser usado con libertad.
 ```

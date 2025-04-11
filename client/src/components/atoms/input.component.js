@@ -472,7 +472,7 @@ class InputComponent extends HTMLElement {
         <style>${styles}</style>
         <label class="input-label" for="input-field-${
           this._uniqueId
-        }" ?hidden="${!this._label}">
+        }" hidden="${!this._label}">
           ${this._label}${this._required ? " *" : ""}
         </label>
         
@@ -492,10 +492,8 @@ class InputComponent extends HTMLElement {
           />
         </div>
         
-        <div class="error-message" ?hidden="${!this._error}">${
-      this._error
-    }</div>
-        <div class="helper-text" ?hidden="${!this._helper || this._error}">${
+        <div class="error-message" hidden="${!this._error}">${this._error}</div>
+        <div class="helper-text" hidden="${!this._helper || this._error}">${
       this._helper
     }</div>
       `;

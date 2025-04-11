@@ -841,11 +841,11 @@ class IncidentListComponent extends HTMLElement {
           </div>
         </div>
         
-        <div class="list-loader" ?hidden="${!this._isLoading}">
+        <div class="list-loader" hidden="${!this._isLoading}">
           <div class="spinner"></div>
         </div>
         
-        <div class="list-content" ?hidden="${this._isLoading}">
+        <div class="list-content" hidden="${this._isLoading}">
           <div class="incidents-list"></div>
           
           <div class="pagination">

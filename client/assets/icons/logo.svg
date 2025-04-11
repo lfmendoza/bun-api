@@ -1,0 +1,19 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#ffffff"/>
+  
+  <!-- Escudo -->
+  <path d="M100,10 L160,40 L160,120 Q100,180 40,120 L40,40 Z" fill="#e53935" stroke="#b71c1c" stroke-width="4"/>
+
+  <!-- Triángulo de advertencia -->
+  <polygon points="100,50 125,110 75,110" fill="#fff176" stroke="#fbc02d" stroke-width="3"/>
+  
+  <!-- Signo de exclamación -->
+  <line x1="100" y1="70" x2="100" y2="95" stroke="#000" stroke-width="6"/>
+  <circle cx="100" cy="105" r="4" fill="#000"/>
+
+  <!-- Texto -->
+  <text x="100" y="180" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+    INCIDENT REPORTING
+  </text>
+</svg>
