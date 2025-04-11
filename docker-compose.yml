@@ -3,56 +3,84 @@ version: "3.9"
 services:
   db:
     image: postgres:16
-    container_name: incidents_db
+    container_name: ${COMPOSE_PROJECT_NAME:-incidents}_db
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "incidents_db"
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-incidents_db}
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db_init:/docker-entrypoint-initdb.d
     networks:
       - incidents_net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    restart: unless-stopped
 
   api:
-    build: ./api
-    container_name: incidents_api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME:-incidents}_api
     ports:
-      - "3000:3000"
+      - "${API_PORT:-3000}:3000"
     environment:
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_NAME=incidents_db
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_NAME=${DB_NAME:-incidents_db}
+      - NODE_ENV=${NODE_ENV:-development}
     depends_on:
       db:
         condition: service_healthy
     networks:
       - incidents_net
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/incidents",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   client:
-    build: ./client
-    container_name: incidents_client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        - API_URL=${API_URL:-http://localhost:3000}
+    container_name: ${COMPOSE_PROJECT_NAME:-incidents}_client
     ports:
-      - "8080:80"
+      - "${CLIENT_PORT:-8080}:80"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     networks:
       - incidents_net
+    restart: unless-stopped
     environment:
-      - API_URL=http://api:3000
+      - API_URL=${API_URL:-http://api:3000}
 
 volumes:
   postgres_data:
+    name: ${COMPOSE_PROJECT_NAME:-incidents}_postgres_data
 
 networks:
   incidents_net:
+    name: ${COMPOSE_PROJECT_NAME:-incidents}_net
     driver: bridge
