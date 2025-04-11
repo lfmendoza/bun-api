@@ -24,7 +24,7 @@ Una plataforma completa para gestionar incidentes técnicos, con una API en Bun 
 - Documentación con Swagger UI
 - Alta performance con bajo consumo de recursos
 
-## ⚙️ Tecnologías utilizadas
+## ⚙️ Tecnologías Utilizadas
 
 ### Frontend
 
@@ -47,139 +47,158 @@ Una plataforma completa para gestionar incidentes técnicos, con una API en Bun 
 - [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/)
 - [Nginx](https://nginx.org/) para servir el frontend
 
-## 📋 Estructura de datos
+## 📋 Estructura de Datos
 
 ### Datos de un incidente
 
 - `id`: Autogenerado (integer)
 - `reporter`: Nombre del reportador (string, obligatorio)
 - `description`: Descripción del incidente (mínimo 10 caracteres)
-- `status`: Estado del incidente (pendiente, en proceso, resuelto)
+- `status`: Estado del incidente (`pendiente`, `en proceso`, `resuelto`)
 - `created_at`: Fecha y hora de creación
 
-## 📦 Estructura del proyecto
+## 📦 Estructura del Proyecto
 
+```
 incidents-platform/
-├── api/ # API en Bun
-├── client/ # Cliente en Vanilla JavaScript
-├── db_init/ # Scripts de inicialización de BD
-├── docker-compose.yml # Orquestación con Docker Compose
-└── README.md # Este archivo
+├── api/                   # API en Bun
+├── client/                # Cliente en Vanilla JavaScript
+├── db_init/               # Scripts de inicialización de BD
+├── docker-compose.yml     # Orquestación con Docker Compose
+└── README.md              # Este archivo
+```
 
 ## 🛠️ Requisitos
 
 - **Docker** y **Docker Compose** instalados
 - No necesitas instalar nada más localmente; todo se ejecuta en contenedores
 
-## ▶️ Cómo ejecutar el proyecto
+## ▶️ Cómo Ejecutar el Proyecto
 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <tu-repositorio>
-cd <nombre-del-directorio>
+git clone https://github.com/lfmendoza/bun-api
+cd bun-api
 ```
 
-2. Iniciar los contenedores con Docker Compose
-   bashdocker-compose up --build
-3. Acceder a la aplicación
+### 2. Iniciar los contenedores con Docker Compose
 
-Cliente (Frontend): http://localhost:8080
-API (Backend): http://localhost:3000
-Swagger UI: http://localhost:3000/
-Swagger YAML: http://localhost:3000/swagger.yaml
+```bash
+docker-compose up --build
+```
 
-📚 Documentación de API
-Endpoints disponibles
-MétodoRutaDescripciónGET/incidentsObtener todos los incidentesGET/incidents/:idObtener incidente por IDPOST/incidentsCrear un nuevo incidentePUT/incidents/:idActualizar estado de incidenteDELETE/incidents/:idEliminar un incidente
-Detalles de los endpoints
-GET /incidents
+### 3. Acceder a la aplicación
 
-Descripción: Obtiene la lista completa de incidentes
-Respuesta: Array de objetos incidente
-Código de respuesta: 200 OK
+- Cliente (Frontend): http://localhost:8080
+- API (Backend): http://localhost:3000
+- Swagger UI: http://localhost:3000/
+- Swagger YAML: http://localhost:3000/swagger.yaml
 
-GET /incidents/{id}
+---
 
-Descripción: Obtiene un incidente específico por su ID
-Parámetros: id (integer, en path)
-Respuesta: Objeto incidente
-Códigos de respuesta:
+## 📚 Documentación de API
 
-200 OK (Incidente encontrado)
-404 (Incidente no encontrado)
+### Endpoints Disponibles
 
-POST /incidents
+| Método | Ruta           | Descripción                    |
+| ------ | -------------- | ------------------------------ |
+| GET    | /incidents     | Obtener todos los incidentes   |
+| GET    | /incidents/:id | Obtener incidente por ID       |
+| POST   | /incidents     | Crear un nuevo incidente       |
+| PUT    | /incidents/:id | Actualizar estado de incidente |
+| DELETE | /incidents/:id | Eliminar un incidente          |
 
-Descripción: Crea un nuevo incidente
-Body: Objeto con reporter y description
-Validaciones:
+### Detalles de los Endpoints
 
-reporter es obligatorio
-description debe tener al menos 10 caracteres
+#### GET /incidents
 
-Respuesta: Incidente creado
-Códigos de respuesta:
+- **Descripción**: Obtiene la lista completa de incidentes
+- **Respuesta**: Array de objetos incidente
+- **Código**: `200 OK`
 
-201 Created (Incidente creado)
-400 Bad Request (Error de validación)
+#### GET /incidents/{id}
 
-PUT /incidents/{id}
+- **Descripción**: Obtiene un incidente específico por su ID
+- **Parámetros**: `id` (integer, en path)
+- **Respuesta**: Objeto incidente
+- **Códigos**:
+  - `200 OK` (Incidente encontrado)
+  - `404 Not Found` (No encontrado)
 
-Descripción: Actualiza el estado de un incidente
-Parámetros: id (integer, en path)
-Body: Objeto con status (pendiente, en proceso, resuelto)
-Respuesta: Incidente actualizado
-Códigos de respuesta:
+#### POST /incidents
 
-200 OK (Incidente actualizado)
-400 Bad Request (Error de validación)
-404 (Incidente no encontrado)
+- **Descripción**: Crea un nuevo incidente
+- **Body**: Objeto con `reporter` y `description`
+- **Validaciones**:
+  - `reporter` es obligatorio
+  - `description` debe tener al menos 10 caracteres
+- **Respuesta**: Incidente creado
+- **Códigos**:
+  - `201 Created`
+  - `400 Bad Request`
 
-DELETE /incidents/{id}
+#### PUT /incidents/{id}
 
-Descripción: Elimina un incidente
-Parámetros: id (integer, en path)
-Respuesta: Mensaje de éxito
-Códigos de respuesta:
+- **Descripción**: Actualiza el estado de un incidente
+- **Parámetros**: `id` (integer, en path)
+- **Body**: Objeto con `status` (`pendiente`, `en proceso`, `resuelto`)
+- **Respuesta**: Incidente actualizado
+- **Códigos**:
+  - `200 OK`
+  - `400 Bad Request`
+  - `404 Not Found`
 
-200 OK (Incidente eliminado)
-404 (Incidente no encontrado)
+#### DELETE /incidents/{id}
 
-🧩 Funcionalidades del cliente
+- **Descripción**: Elimina un incidente
+- **Parámetros**: `id` (integer, en path)
+- **Respuesta**: Mensaje de éxito
+- **Códigos**:
+  - `200 OK`
+  - `404 Not Found`
 
-Listado de incidentes: Vista principal con listado paginado y opciones de filtrado/ordenación
-Detalle de incidente: Vista completa con toda la información del incidente
-Creación de incidentes: Formulario para reportar nuevos incidentes
-Actualización de estado: Cambiar el estado de un incidente entre pendiente, en proceso y resuelto
-Eliminación de incidentes: Eliminar incidentes con confirmación
-Tema claro/oscuro: Cambiar entre temas con persistencia de preferencia
-Notificaciones: Sistema de notificaciones para informar sobre acciones realizadas
-Navegación responsive: Adaptación a diferentes tamaños de pantalla
+---
 
-🧪 Consideraciones técnicas
-Optimizaciones de rendimiento
+## 🧩 Funcionalidades del Cliente
 
-Web Workers para operaciones pesadas
-Renderizado por lotes de listas grandes
-Lazy Loading de componentes
-Caché inteligente para peticiones a la API
+- Listado de incidentes: Vista paginada con filtrado y ordenación
+- Detalle de incidente: Información completa del incidente
+- Creación de incidentes: Formulario con validaciones
+- Actualización de estado: Cambiar entre estados definidos
+- Eliminación de incidentes: Confirmación antes de eliminar
+- Tema claro/oscuro: Persistencia de preferencia
+- Notificaciones: Feedback visual de acciones
+- Navegación responsive: Adaptado a cualquier dispositivo
 
-Accesibilidad
+---
 
-Etiquetas ARIA para componentes interactivos
-Estructura semántica de HTML
-Suficiente contraste de colores
-Navegación por teclado
+## 🧪 Consideraciones Técnicas
 
-Seguridad
+### Optimizaciones de Rendimiento
 
-Sanitización de entradas
-Protección contra XSS
-Headers de seguridad en configuración de Nginx
-Validación de datos tanto en cliente como en servidor
+- Web Workers para tareas intensivas
+- Renderizado por lotes
+- Lazy Loading de componentes
+- Caché inteligente de peticiones
 
-📝 Licencia
+### Accesibilidad
+
+- Uso de etiquetas ARIA
+- HTML semántico
+- Contraste adecuado
+- Navegación por teclado
+
+### Seguridad
+
+- Sanitización de entradas
+- Protección contra XSS
+- Headers seguros con Nginx
+- Validaciones en cliente y servidor
+
+---
+
+## 📝 Licencia
 
 ```
 Este proyecto es de código abierto y puede ser usado con libertad.
